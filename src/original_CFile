@@ -23,7 +23,7 @@ int main()
 		error = 0;
 		//Begins error loop
 		do {
-			//Asks user to input desired details and puts responses into corrosponding variables 
+			//Asks user to input desired details and puts responses into corrosponding variables
 			printf ("enter number of rows (width)\n");
 			scanf("%d", &Width);
 			printf ("enter number of columns (height) \n");
@@ -73,7 +73,7 @@ int main()
 
 		D3WL = D_Grid(Depth,Height,SizeOfWL);
 		D3WL = (D3WL * Width);
-		
+
 		//Uses dig function to calculate correct winning lines and Cross dimention function to calculate how 			//many times to use it.
 		dig1 = Dig(Height,Width,SizeOfWL);
 		CD1WL = CrossDGrid(Depth, dig1, SizeOfWL);
@@ -82,17 +82,17 @@ int main()
 		CD2WL = CrossDGrid(Width, dig2, SizeOfWL);
 		//Adds together cross dimention lines
 		CDWL = (CD1WL + CD2WL);
-		//Adds up all the totals 
+		//Adds up all the totals
 		TotalWL = (D1WL + D2WL + D3WL + CDWL);
 		TotalWL = (TotalWL * 2);
 		TotalWL4 = (TotalWL * 2);
 		//Displays output to user
 		printf("When noughts and crosses is played on a ");
-		printf("%d", Height); 
+		printf("%d", Height);
 		printf(" x ");
-		printf("%d", Width); 
+		printf("%d", Width);
 		printf(" x ");
-		printf("%d", Depth); 
+		printf("%d", Depth);
  		printf(" grid \nand the size of the winning line is ");
 		printf("%d\n", SizeOfWL);
 		printf("The number of possible wining lines is \n(Straight X's or O's) - ");
@@ -108,12 +108,12 @@ int main()
 	//Loops if the user wants to reuse the program
 	} while (ExitControl < 1);
 }
-	
+
 int D_Grid (int y, int z, int n)
 {
 	int HWL, VWL,DWL; // Horizontal, vertical, diagional winning lines variable
 	int TWL; // Total winning lines
-	
+
 	HWL = (y*((z-n)+1)); //Horizontal winning lines
 	VWL = (z*((y-n)+1)); //Vertical winning lines
 	DWL = (2 * ((HWL/y) * (VWL)/z)); //diagional winning lines
@@ -125,7 +125,7 @@ int D_Grid (int y, int z, int n)
 int Dig (int y, int z, int n)
 {
 	int HWL, VWL,DWL; // Horizontal, vertical, diagional winning lines variable
-	
+
 	HWL = (y*((z-n)+1)); // Horizontal winning lines
 	VWL = (z*((y-n)+1)); //Vertical winning lines
 	DWL = (2 * ((HWL/y) * (VWL)/z)); //diagional winning lines
@@ -136,7 +136,7 @@ int Dig (int y, int z, int n)
 int CrossDGrid (int u, int d, int n)
 {
 	int Horizontal, CDLines; //winning lines to calculate diagonals
-	
+
 	Horizontal = ((u-n)+1); //((Hight - Winning line length) +1) =  number of times to run the loop
 	CDLines = (d * Horizontal); // total of the above result run the correct ammount of times
 	//Return total
