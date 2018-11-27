@@ -1,4 +1,4 @@
-public class naughtsAndCrossesCalculator {
+public class naughtsAndCrossesCalculator extends Exception{
 
     static int Height, Width, Depth, SizeOfWL; //Input variables
     int HWinningLines, VWinningLines; // 2D winning line variables TODO: use for 2d inputs
@@ -50,40 +50,29 @@ public class naughtsAndCrossesCalculator {
                 dig2 = Dig(Height, Depth, SizeOfWL);
                 CD2WL = CrossDGrid(Width, dig2, SizeOfWL);
             }
+        } else {
+            return 0;
         }
         return (D1WL + D2WL + D3WL + CDWL);
     }
 
-    public static boolean validateSizesFit(){
-        if (Width > Height)
+    public static boolean validateSizesFit() throws NumberFormatException{
+        if ((Width > Height) && (Height > Depth) && (Depth < SizeOfWL))
         {
-            if(Height > Depth)
-            {
-                if(Depth < SizeOfWL)
-                {
-                    return true;
-                }
-            }
+            return true;
         }
-        if (Height > Depth)
+
+        if ((Height > Depth) && (Depth > Width) && (Width < SizeOfWL))
         {
-            if(Depth > Width)
-            {
-                if(Width < SizeOfWL)
-                {
-                    return true;
-                }
-            }
+            return true;
         }
-        if (Depth > Width)
+        if ((Depth > Width) && (Width > Height) && (Height < SizeOfWL))
         {
-            if(Width > Height)
-            {
-                if(Height < SizeOfWL)
-                {
-                    return true;
-                }
-            }
+            return true;
+        }
+
+        if((SizeOfWL > Depth ) && (SizeOfWL > Width )&& (SizeOfWL > Height )){
+            return true;
         }
         return false;
     }
@@ -102,24 +91,24 @@ public class naughtsAndCrossesCalculator {
         return TWL;
     }
 
-    //TODO: rename inputs
-    public static int Dig (int y, int z, int n)
+    //Inputs change depending on stage of calculation, hence vague input names
+    public static int Dig (int dimension_1, int dimension_2, int dimension_3)
     {
         int HWL, VWL,DWL; // Horizontal, vertical, diagonal winning lines variable
 
-        HWL = (y*((z-n)+1)); // Horizontal winning lines
-        VWL = (z*((y-n)+1)); //Vertical winning lines
-        DWL = (2 * ((HWL/y) * (VWL)/z)); //diagonal winning lines
+        HWL = (dimension_1*((dimension_2-dimension_3)+1)); // Horizontal winning lines
+        VWL = (dimension_2*((dimension_1-dimension_3)+1)); //Vertical winning lines
+        DWL = (2 * ((HWL/dimension_1) * (VWL)/dimension_2)); //diagonal winning lines
         //Return diagonal winning lines
         return DWL;
     }
 
-    //TODO: rename inputs
-    public static int CrossDGrid (int u, int d, int n) {
+    //Inputs change depending on stage of calculation, hence vague input names
+    public static int CrossDGrid (int height, int depth, int winningLineLength) {
         int Horizontal, CDLines; //winning lines to calculate diagonals
 
-        Horizontal = ((u - n) + 1); //((Height - Winning line length) +1) =  number of times to run the loop
-        CDLines = (d * Horizontal); // total of the above result run the correct amount of times
+        Horizontal = ((height - winningLineLength) + 1); //((Height - Winning line length) +1) =  number of times to run the loop
+        CDLines = (depth * Horizontal); // total of the above result run the correct amount of times
         //Return total
         return CDLines;
     }
