@@ -1,13 +1,11 @@
 public class naughtsAndCrossesCalculator extends Exception{
 
     static int Height, Width, Depth, SizeOfWL; //Input variables
-    int HWinningLines, VWinningLines; // 2D winning line variables TODO: use for 2d inputs
     static int D1WL, D2WL, D3WL, CDWL, CD1WL, CD2WL, CD3WL, TotalWL, TotalWL2, TotalWL4;// Dimension winning line variables
     //int error, ExitControl, EndGame, NandC, CDLoopLines; // Control variables - TODO: add system controls
     static int dig1, dig2;
 
     //TODO: Create inputs, so system can be run by user(see sys controls)
-    //TODO: comment maths explanation
     public static void main (String[] args) {
 
         //Takes Winning lines for one player in a 2 player standard game
@@ -21,7 +19,6 @@ public class naughtsAndCrossesCalculator extends Exception{
         System.out.println("The number of possible wining lines for each player in a standard 2 player game is :  " + TotalWL);
         System.out.println("The number of possible wining lines including both players (Straight X's or O's) :  " + TotalWL2);
         System.out.println("The number of possible wining lines is (If alternating X's and O's counts as a winning line) :  " + TotalWL4);
-
     }
 
     public static int calculatePotentialWinningLines(int width, int height, int depth, int sizeOfWinningLine) {
@@ -33,27 +30,36 @@ public class naughtsAndCrossesCalculator extends Exception{
 
         if(!validateSizesFit()) {
             //Calls dimension calculator on each combination of sides
-            D1WL = D_Grid(Height, Width, SizeOfWL);
+            //height X width X Size of Winning Line
+            D1WL = dGrid(Height, Width, SizeOfWL);
             if (Depth != 1) {
+                //Dimension 1 winning lines: (result from Height x Width) X Depth
                 D1WL = (D1WL * Depth);
 
-                D2WL = D_Grid(Width, Depth, SizeOfWL);
+                //Dimension 2 Winning lines: width X depth X Size of Winning Line
+                D2WL = dGrid(Width, Depth, SizeOfWL);
                 D2WL = (D2WL * Height);
 
-                D3WL = D_Grid(Depth, Height, SizeOfWL);
+                //Dimension 3 Winning lines: depth X height X Size of Winning Line
+                D3WL = dGrid(Depth, Height, SizeOfWL);
                 D3WL = (D3WL * Width);
 
                 //Uses dig function to calculate correct winning lines and Cross dimension function to calculate how many times to use it.
-                dig1 = Dig(Height, Width, SizeOfWL);
-                CD1WL = CrossDGrid(Depth, dig1, SizeOfWL);
 
-                dig2 = Dig(Height, Depth, SizeOfWL);
-                CD2WL = CrossDGrid(Width, dig2, SizeOfWL);
+                dig1 = diagonal(Height, Width, SizeOfWL);
+                CD1WL = crossDGrid(Depth, dig1, SizeOfWL);
+
+                dig2 = diagonal(Height, Depth, SizeOfWL);
+                CD2WL = crossDGrid(Width, dig2, SizeOfWL);
+
+
+
+                CDWL = CD1WL + CD2WL;
             }
         } else {
             return 0;
         }
-        return (D1WL + D2WL + D3WL + CDWL);
+        return (D1WL + D2WL + D3WL + CDWL); //D2WL +
     }
 
     public static boolean validateSizesFit() throws NumberFormatException{
@@ -78,21 +84,28 @@ public class naughtsAndCrossesCalculator extends Exception{
     }
 
     //Inputs change depending on stage of calculation, hence vague input names
-    public static int D_Grid (int dimension_1, int dimension_2, int dimension_3 )
+    public static int dGrid (int dimension_1, int dimension_2, int sizeOfWinningLine )
     {
         int HWL, VWL,DWL; // Horizontal, vertical, diagonal winning lines variable
         int TWL; // Total winning lines
 
-        HWL = (dimension_1*((dimension_2-dimension_3)+1)); //Horizontal winning lines
-        VWL = (dimension_2*((dimension_1-dimension_3)+1)); //Vertical winning lines
-        DWL = (2 * ((HWL/dimension_1) * (VWL)/dimension_2)); //diagonal winning lines
-        TWL = (HWL + VWL + DWL); //total winning lines
+        if((sizeOfWinningLine > dimension_1) && (sizeOfWinningLine > dimension_2)) {
+            return 0;
+        } else  {
+            HWL = (dimension_1*((dimension_2-sizeOfWinningLine)+1)); //Horizontal winning lines
+            if(HWL < 0 ) {  HWL = 0;    }
+            VWL = (dimension_2*((dimension_1-sizeOfWinningLine)+1)); //Vertical winning lines
+            if(VWL < 0 ) {  VWL = 0;    }
+            DWL = (2 * ((HWL/dimension_1) * (VWL)/dimension_2)); //diagonal winning lines
+            TWL = (HWL + VWL + DWL); //total winning lines
+        }
+
         //Return total
         return TWL;
     }
 
     //Inputs change depending on stage of calculation, hence vague input names
-    public static int Dig (int dimension_1, int dimension_2, int dimension_3)
+    public static int diagonal (int dimension_1, int dimension_2, int dimension_3)
     {
         int HWL, VWL,DWL; // Horizontal, vertical, diagonal winning lines variable
 
@@ -104,11 +117,11 @@ public class naughtsAndCrossesCalculator extends Exception{
     }
 
     //Inputs change depending on stage of calculation, hence vague input names
-    public static int CrossDGrid (int height, int depth, int winningLineLength) {
+    public static int crossDGrid (int dimension_1, int diagonal, int winningLineLength) {
         int Horizontal, CDLines; //winning lines to calculate diagonals
 
-        Horizontal = ((height - winningLineLength) + 1); //((Height - Winning line length) +1) =  number of times to run the loop
-        CDLines = (depth * Horizontal); // total of the above result run the correct amount of times
+        Horizontal = ((dimension_1 - winningLineLength) + 1); //((Height - Winning line length) +1) =  number of times to run the loop
+        CDLines = (diagonal * Horizontal); // total of the above result run the correct amount of times
         //Return total
         return CDLines;
     }
