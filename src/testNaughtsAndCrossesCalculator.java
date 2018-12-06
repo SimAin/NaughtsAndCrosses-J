@@ -2,6 +2,7 @@ public class testNaughtsAndCrossesCalculator {
 
     //Run Search methods
     public static void main (String[] args) {
+
         System.out.println("Test run, passed tests will return true: ");
 
         //If Width == Depth == Height == SizeofWinningLine then result = n(6(n+1)) + 4

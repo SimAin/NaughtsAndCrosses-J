@@ -1,11 +1,9 @@
 public class naughtsAndCrossesCalculator extends Exception{
 
     static int Height, Width, Depth, SizeOfWL; //Input variables
-    static int D1WL, D2WL, D3WL, CDWL, CD1WL, CD2WL, CD3WL, TotalWL, TotalWL2, TotalWL4;// Dimension winning line variables
-    //int error, ExitControl, EndGame, NandC, CDLoopLines; // Control variables - TODO: add system controls
+    private static int D1WL, D2WL, D3WL, CDWL, CD1WL, CD2WL, TotalWL, TotalWL2, TotalWL4;// Dimension winning line variables
     static int dig1, dig2;
 
-    //TODO: Create inputs, so system can be run by user(see sys controls)
     public static void main (String[] args) {
 
         //Takes Winning lines for one player in a 2 player standard game
@@ -51,8 +49,6 @@ public class naughtsAndCrossesCalculator extends Exception{
 
                 dig2 = diagonal(Height, Depth, SizeOfWL);
                 CD2WL = crossDGrid(Width, dig2, SizeOfWL);
-
-
 
                 CDWL = CD1WL + CD2WL;
             }
