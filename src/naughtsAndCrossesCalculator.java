@@ -1,6 +1,6 @@
 public class naughtsAndCrossesCalculator extends Exception{
 
-    static int Height, Width, Depth, SizeOfWL; //Input variables
+    //static int Height, Width, Depth, SizeOfWL; //Input variables
     private static int D1WL, D2WL, D3WL, CDWL, CD1WL, CD2WL, TotalWL, TotalWL2, TotalWL4;// Dimension winning line variables
     static int dig1, dig2;
 
@@ -13,7 +13,7 @@ public class naughtsAndCrossesCalculator extends Exception{
         //Removing the assumption that a winning line has to be a straight line of 0's or X's, this calculates the number of lines if they can alternate
         TotalWL4 = (TotalWL2 * 2);
 
-        System.out.println("When noughts and crosses is played on a " + Height + " x " + Width + " x " + Depth + " grid and the size of the winning line is " + SizeOfWL + " :");
+        //System.out.println("When noughts and crosses is played on a " + Height + " x " + Width + " x " + Depth + " grid and the size of the winning line is " + SizeOfWL + " :");
         System.out.println("The number of possible wining lines for each player in a standard 2 player game is :  " + TotalWL);
         System.out.println("The number of possible wining lines including both players (Straight X's or O's) :  " + TotalWL2);
         System.out.println("The number of possible wining lines is (If alternating X's and O's counts as a winning line) :  " + TotalWL4);
@@ -21,59 +21,57 @@ public class naughtsAndCrossesCalculator extends Exception{
 
     public static int calculatePotentialWinningLines(int width, int height, int depth, int sizeOfWinningLine) {
 
-        Height = height;
-        Width = width;
-        Depth = depth;
-        SizeOfWL = sizeOfWinningLine;
+        gameBoard grid = new gameBoard(height,width,depth,sizeOfWinningLine);
 
-        if(!validateSizesFit()) {
+        if(!validateSizesFit(grid)) {
             //Calls dimension calculator on each combination of sides
             //height X width X Size of Winning Line
-            D1WL = dGrid(Height, Width, SizeOfWL);
-            if (Depth != 1) {
+            D1WL = dGrid(grid.getHeight(), grid.getWidth(), grid.getSizeOfWL());
+            if (grid.getDepth() != 1) {
                 //Dimension 1 winning lines: (result from Height x Width) X Depth
-                D1WL = (D1WL * Depth);
+                D1WL = (D1WL * grid.getDepth());
 
                 //Dimension 2 Winning lines: width X depth X Size of Winning Line
-                D2WL = dGrid(Width, Depth, SizeOfWL);
-                D2WL = (D2WL * Height);
+                D2WL = dGrid(grid.getWidth(), grid.getDepth(), grid.getSizeOfWL());
+                D2WL = (D2WL * grid.getHeight());
 
                 //Dimension 3 Winning lines: depth X height X Size of Winning Line
-                D3WL = dGrid(Depth, Height, SizeOfWL);
-                D3WL = (D3WL * Width);
+                D3WL = dGrid(grid.getDepth(), grid.getHeight(), grid.getSizeOfWL());
+                D3WL = (D3WL * grid.getWidth());
 
                 //Uses dig function to calculate correct winning lines and Cross dimension function to calculate how many times to use it.
 
-                dig1 = diagonal(Height, Width, SizeOfWL);
-                CD1WL = crossDGrid(Depth, dig1, SizeOfWL);
+                dig1 = diagonal(grid.getHeight(), grid.getWidth(), grid.getSizeOfWL());
+                CD1WL = crossDGrid(grid.getDepth(), dig1, grid.getSizeOfWL());
 
-                dig2 = diagonal(Height, Depth, SizeOfWL);
-                CD2WL = crossDGrid(Width, dig2, SizeOfWL);
+                dig2 = diagonal(grid.getHeight(), grid.getDepth(), grid.getSizeOfWL());
+                CD2WL = crossDGrid(grid.getWidth(), dig2, grid.getSizeOfWL());
 
                 CDWL = CD1WL + CD2WL;
             }
         } else {
             return 0;
         }
+        drawNaughtsAndCrosses.draw2D(grid);
         return (D1WL + D2WL + D3WL + CDWL); //D2WL +
     }
 
-    public static boolean validateSizesFit() throws NumberFormatException{
-        if ((Width > Height) && (Height > Depth) && (Depth < SizeOfWL))
+    public static boolean validateSizesFit(gameBoard grid) throws NumberFormatException{
+        if ((grid.getWidth() > grid.getHeight()) && (grid.getHeight() > grid.getDepth()) && (grid.getDepth() < grid.getSizeOfWL()))
         {
             return true;
         }
 
-        if ((Height > Depth) && (Depth > Width) && (Width < SizeOfWL))
+        if ((grid.getHeight() > grid.getDepth()) && (grid.getDepth() > grid.getWidth()) && (grid.getWidth() < grid.getSizeOfWL()))
         {
             return true;
         }
-        if ((Depth > Width) && (Width > Height) && (Height < SizeOfWL))
+        if ((grid.getDepth() > grid.getWidth()) && (grid.getWidth() > grid.getHeight()) && (grid.getHeight() < grid.getSizeOfWL()))
         {
             return true;
         }
 
-        if((SizeOfWL > Depth ) && (SizeOfWL > Width )&& (SizeOfWL > Height )){
+        if((grid.getSizeOfWL() > grid.getDepth() ) && (grid.getSizeOfWL() > grid.getWidth() )&& (grid.getSizeOfWL() > grid.getHeight() )){
             return true;
         }
         return false;
