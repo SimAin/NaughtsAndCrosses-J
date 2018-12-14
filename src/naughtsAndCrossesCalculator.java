@@ -52,7 +52,10 @@ public class naughtsAndCrossesCalculator extends Exception{
         } else {
             return 0;
         }
-        drawNaughtsAndCrosses.draw2D(grid);
+
+        drawNaughtsAndCrosses.drawFront2D(grid);
+        drawNaughtsAndCrosses.drawSide2D(grid);
+        drawNaughtsAndCrosses.drawTop2D(grid);
         return (D1WL + D2WL + D3WL + CDWL); //D2WL +
     }
 
